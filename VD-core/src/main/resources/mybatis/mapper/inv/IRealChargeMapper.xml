@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.runner.center.omc.virtualdeduct.mapper.inv.IRealChargeMapper" >
+	<resultMap type="com.ai.runner.center.omc.virtualdeduct.entity.ar.AccChargeInfo" id="queryMap">
+		<id column="subs_id" property="subsid"/>
+		<result column="total" property="total"/>
+		<result column="disc" property="disc"/>
+	</resultMap>
+ <select id="query"  resultMap="queryMap">
+ select subs_id,total,disc
+ from real_charge_${accmonth}
+  where acct_id=#{owner.owerId}
+ </select>
+ </mapper>

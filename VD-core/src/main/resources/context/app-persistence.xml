@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+        http://www.springframework.org/schema/lang
+        http://www.springframework.org/schema/lang/spring-lang.xsd
+        http://www.springframework.org/schema/tx/spring-tx-2.0.xsd default-autowire=byName
+        http://mybatis.org/schema/mybatis-spring
+        http://mybatis.org/schema/mybatis-spring.xsd">   
+
+	<!-- INV库访问bean定义 -->
+
+	
+	<bean id="realEventServiceImpl" class="com.ai.runner.center.omc.scout.cal.manager.service.db.RealEventServiceImpl">
+	   <property name="sqlSessionTemplate" ref="sqlSessionTemplateinv"/>
+	</bean>
+	<bean id="scoutStatusServiceImpl" class="com.ai.runner.center.omc.scout.cal.manager.service.db.ScoutStatusServiceImpl">
+	   <property name="sqlSessionTemplate" ref="sqlSessionTemplateinv"/>
+	</bean>
+	<bean id="urgeStatusServiceImpl" class="com.ai.runner.center.omc.scout.cal.manager.service.db.UrgeStatusServiceImpl">
+	   <property name="sqlSessionTemplate" ref="sqlSessionTemplateinv"/>
+	</bean>
+	
+	<bean id="scoutBmsInterfaceServiceImpl" class="com.ai.runner.center.omc.scout.cal.manager.service.db.ScoutBmsInterfaceServiceImpl">
+	   <property name="sqlSessionTemplate" ref="sqlSessionTemplateinv"/>
+	</bean>
+	<bean id="scoutFilttimeServiceImpl" class="com.ai.runner.center.omc.scout.cal.manager.service.db.ScoutFilttimeServiceImpl">
+	   <property name="sqlSessionTemplate" ref="sqlSessionTemplateinv"/>
+	</bean>
+
+
+	<bean id="sgipSrcGsmServiceImpl" class="com.ai.runner.center.omc.scout.cal.manager.service.db.SgipSrcGsmServiceImpl">
+	   <property name="sqlSessionTemplate" ref="sqlSessionTemplateinv"/>
+	</bean>
+
+	<bean id="speWarningNbrServiceImpl" class="com.ai.runner.center.omc.scout.cal.manager.service.db.SpeWarningNbrServiceImpl">
+	   <property name="sqlSessionTemplate" ref="sqlSessionTemplateinv"/>
+	</bean>
+
+	<bean id="sysSequence" class="com.ai.runner.center.omc.scout.cal.manager.service.db.SysSequence">
+	   <property name="sqlSessionTemplate" ref="sqlSessionTemplateinv"/>
+	</bean> 
+	<bean id="scoutLogServiceImpl" class="com.ai.runner.center.omc.scout.cal.manager.service.db.ScoutLogServiceImpl">
+	   <property name="sqlSessionTemplate" ref="sqlSessionTemplateinv"/>
+	</bean>         
+     <!-- AR库访问bean定义 -->   
+     <bean id="chargeService" class="com.ai.runner.center.omc.scout.cal.bwo.service.AccChargeServiceImpl">
+		<property name="jdbcTemplate" ref="mysqlJdbcTemplatear"/> 
+	</bean>
+
+	 <bean id="accCycleControl" class="com.ai.runner.center.omc.scout.cal.bwo.service.AccCycleControl">
+		<property name="jdbcTemplate" ref="mysqlJdbcTemplatear"/> 
+	</bean>
+    <bean id="accInvoiceService" class="com.ai.runner.center.omc.scout.cal.bwo.service.AccInvoiceServiceImpl">
+		<property name="jdbcTemplate" ref="mysqlJdbcTemplatear"/> 
+	</bean>
+	<bean id="realChargeService" class="com.ai.runner.center.omc.scout.cal.bwo.service.RealChargeServiceImpl">
+		<property name="jdbcTemplate" ref="mysqlJdbcTemplatear"/> 
+	</bean>
+	
+	<!-- inv 库访问 -->
+	<bean id="accAccountInfoService" class="com.ai.runner.center.omc.scout.cal.bwo.service.AccAccountInfoServiceImpl">
+		<property name="jdbcTemplate" ref="mysqlJdbcTemplateinv"/> 
+	</bean>
+	<bean id="scoutRedlistServiceImpl" class="com.ai.runner.center.omc.scout.cal.manager.service.db.ScoutRedlistServiceImpl">
+	   <property name="jdbcTemplate" ref="mysqlJdbcTemplateinv"/>
+	</bean>
+	<bean id="configObtainImpl" class="com.ai.runner.center.omc.scout.cal.manager.parameters.dao.impl.ConfigObtain">
+	   <property name="jdbcTemplate" ref="mysqlJdbcTemplateinv"/>
+	</bean>
+	<bean id="omcCreditService" class="com.ai.runner.center.omc.scout.cal.manager.service.db.OmcCreditServiceImpl">
+	   <property name="jdbcTemplate" ref="mysqlJdbcTemplateinv"/>
+	</bean>
+		<bean id="speUrgeStopServiceImpl" class="com.ai.runner.center.omc.scout.cal.manager.service.db.SpeUrgeStopServiceImpl">
+	   <property name="jdbcTemplate" ref="mysqlJdbcTemplateinv"/>
+	</bean>
+   <!-- 内存库 -->	
+	<bean id="subsUserServiceImpl" class="com.ai.runner.center.omc.scout.cal.manager.service.shm.SubsUserServiceImpl">
+	</bean>    
+		<bean id="accountServiceImpl" class="com.ai.runner.center.omc.scout.cal.manager.service.shm.AccountServiceImpl">
+	</bean>
+	<bean id="customerServiceImpl" class="com.ai.runner.center.omc.scout.cal.manager.service.shm.CustomerServiceImpl">
+	</bean>
+
+</beans>

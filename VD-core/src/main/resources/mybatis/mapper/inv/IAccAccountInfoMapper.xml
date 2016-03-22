@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.runner.center.omc.virtualdeduct.mapper.inv.IAccAccountInfoMapper" >
+	<resultMap type="com.ai.runner.center.omc.virtualdeduct.entity.ar.AccAccountInfo" id="queryMap">
+		<result column="balance" property="balance"/>
+		<result column="month" property="month"/>
+	</resultMap>
+ <select id="query" parameterType="com.ai.runner.center.omc.virtualdeduct.base.Owner" resultMap="queryMap">
+ select acct_id,balance,month
+ from acc_owe_info
+ where acct_id=#{owerId}
+ </select>
+ </mapper>

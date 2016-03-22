@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+        http://www.springframework.org/schema/lang
+        http://www.springframework.org/schema/lang/spring-lang.xsd
+        http://www.springframework.org/schema/tx/spring-tx-2.0.xsd default-autowire=byName
+        http://mybatis.org/schema/mybatis-spring
+        http://mybatis.org/schema/mybatis-spring.xsd">  
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath*:**/*.properties</value>
+            </list>
+        </property>
+    </bean>    
+    <context:component-scan base-package="com.ai.runner.center.omc.virtualdeduct"></context:component-scan>
+    <context:annotation-config />
+     <bean id="paaSTransactionUserAuth" class="com.ai.runner.sdk.txs.auth.PaaSTransactionUserAuth" init-method="init" />
+  	<bean id="abm" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<!-- 数据库基本信息配置 -->
+		<property name="driverClassName" value="${jdbc.driver}" />	
+		<property name="url" value="${jdbc.abm.url}" />	
+		<property name="username" value="${jdbc.abm.username}" />	
+		<property name="password" value="${jdbc.abm.password}" />
+		<property name="removeAbandoned" value="${jdbc.removeAbandoned}"/>   
+        <property name="initialSize" value="${jdbc.initialSize}" />   
+        <property name="maxIdle" value="${jdbc.maxIdle}" />   
+        <property name="minIdle" value="${jdbc.minIdle}" />   
+        <property name="maxActive" value="${jdbc.maxActive}" />   
+        <property name="maxWait" value="${jdbc.maxWaitMillis}" />   
+        <property name= "testWhileIdle" value="${jdbc.testWhileIdle}" />   
+        <property name= "testOnBorrow" value="${jdbc.testOnBorrow}" />   
+        <property name= "testOnReturn" value="${jdbc.testOnReturn}" />   
+        <property name= "validationQuery" value="${jdbc.validationQuery}" />   
+        <property name= "timeBetweenEvictionRunsMillis" value="${jdbc.timeBetweenEvictionRunsMillis}" />   
+        <property name= "numTestsPerEvictionRun" value="${jdbc.numTestsPerEvictionRun}" />   
+        <property name="minEvictableIdleTimeMillis" value="${jdbc.minEvictableIdleTimeMillis}" />   
+	</bean>
+  	<bean id="sqlSessionFactoryabm" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 注入数据源 -->
+		<property name="dataSource" ref="abm"/>
+		<!-- 扫描dao接口对应的配置文件 -->
+		<property name="mapperLocations" value="classpath*:mybatis/mapper/abm/*.xml"></property>
+		<!-- 实体	起别名 -->
+	</bean>
+	<!-- 扫描DAO接口 
+		防止:接口的映射文件与DAO接口名字不一致的情况
+	-->
+	
+	<bean id="SqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactoryabm"></constructor-arg>
+	</bean>
+	
+	<!-- 创建事务管理器 
+	<bean id="transactionManagerabm" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="abm"/>
+		
+		<qualifier value="abm"></qualifier>
+	</bean>
+	<context:property-placeholder location="classpath:context/jdbc.properties"/>
+	<tx:annotation-driven transaction-manager="transactionManagerabm"/>
+	-->
+	<!-- ————————————————————————第二数据源———————————————————————————————— -->  
+    <bean id="ar" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="${jdbc.driver}" />	
+		<property name="url" value="${jdbc.ar.url}" />	
+		<property name="username" value="${jdbc.ar.username}" />	
+		<property name="password" value="${jdbc.ar.password}" />
+		<property name="removeAbandoned" value="${jdbc.removeAbandoned}"/>   
+        <property name="initialSize" value="${jdbc.initialSize}" />   
+        <property name="maxIdle" value="${jdbc.maxIdle}" />   
+        <property name="minIdle" value="${jdbc.minIdle}" />   
+        <property name="maxActive" value="${jdbc.maxActive}" />   
+        <property name="maxWait" value="${jdbc.maxWaitMillis}" />   
+        <property name= "testWhileIdle" value="${jdbc.testWhileIdle}" />   
+        <property name= "testOnBorrow" value="${jdbc.testOnBorrow}" />   
+        <property name= "testOnReturn" value="${jdbc.testOnReturn}" />   
+        <property name= "validationQuery" value="${jdbc.validationQuery}" />   
+        <property name= "timeBetweenEvictionRunsMillis" value="${jdbc.timeBetweenEvictionRunsMillis}" />   
+        <property name= "numTestsPerEvictionRun" value="${jdbc.numTestsPerEvictionRun}" />   
+        <property name="minEvictableIdleTimeMillis" value="${jdbc.minEvictableIdleTimeMillis}" />   
+	</bean>
+	<!-- 创建SqlSessionFactory -->
+	<bean id="sqlSessionFactoryAr" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="ar"/>
+		<property name="mapperLocations" value="classpath*:mybatis/mapper/ar/*.xml"></property>
+	</bean>
+	<bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 扫描的是哪个包 -->
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryAr"></property>
+		<property name="basePackage" value="com.ai.runner.center.omc.virtualdeduct.mapper.ar"/>
+	</bean>
+	<!-- ————————————————————————第二数据源end———————————————————————————————— -->
+	<!-- ————————————————————————第三数据源———————————————————————————————— -->
+	    <bean id="inv" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="${jdbc.driver}" />	
+		<property name="url" value="${jdbc.inv.url}" />	
+		<property name="username" value="${jdbc.inv.username}" />	
+		<property name="password" value="${jdbc.inv.password}" />
+		<property name="removeAbandoned" value="${jdbc.removeAbandoned}"/>   
+        <property name="initialSize" value="${jdbc.initialSize}" />   
+        <property name="maxIdle" value="${jdbc.maxIdle}" />   
+        <property name="minIdle" value="${jdbc.minIdle}" />   
+        <property name="maxActive" value="${jdbc.maxActive}" />   
+        <property name="maxWait" value="${jdbc.maxWaitMillis}" />   
+        <property name= "testWhileIdle" value="${jdbc.testWhileIdle}" />   
+        <property name= "testOnBorrow" value="${jdbc.testOnBorrow}" />   
+        <property name= "testOnReturn" value="${jdbc.testOnReturn}" />   
+        <property name= "validationQuery" value="${jdbc.validationQuery}" />   
+        <property name= "timeBetweenEvictionRunsMillis" value="${jdbc.timeBetweenEvictionRunsMillis}" />   
+        <property name= "numTestsPerEvictionRun" value="${jdbc.numTestsPerEvictionRun}" />   
+        <property name="minEvictableIdleTimeMillis" value="${jdbc.minEvictableIdleTimeMillis}" />    
+	</bean>
+	<!-- 创建SqlSessionFactory -->
+	<bean id="sqlSessionFactoryinv" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="inv"/>
+		<property name="mapperLocations" value="classpath*:mybatis/mapper/inv/*.xml"></property>
+	</bean>
+	<bean id="mapperScannerConfigurerinv" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 扫描的是哪个包 -->
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryinv"></property>
+		<property name="basePackage" value="com.ai.runner.center.omc.virtualdeduct.mapper.inv"/>
+	</bean>
+	  
+	  <!-- ————————————————————————第三数据源end———————————————————————————————— -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="inv"/>
+	</bean>
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="save*" propagation="REQUIRED"/>
+            <tx:method name="add*" propagation="REQUIRED"/>
+            <tx:method name="insert*" propagation="REQUIRED"/>
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <tx:method name="del*" propagation="REQUIRED"/>
+            <tx:method name="*"/>
+        </tx:attributes>
+    </tx:advice>
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	<context:annotation-config />
+	<context:component-scan base-package="com.ai.runner.center.omc.virtualdeduct" />
+	<import resource="classpath*:context/app_consumer.xml"/>
+</beans>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.runner.center.omc.virtualdeduct.mapper.inv.IAccInvoiceMapper" >
+	<resultMap type="com.ai.runner.center.omc.virtualdeduct.entity.ar.AccInvoiceInfo" id="queryMap">
+		<id column="subs_id" property="subsid"/>
+		<result column="total" property="total"/>
+		<result column="disc" property="disc"/>
+		<result column="adjust" property="adjust"/>
+		<result column="balance" property="balance"/>
+	</resultMap>
+ <select id="query" resultMap="queryMap">
+ select subs_id,total,disc,adjust,balance
+ from acc_invoice_${accmonth}
+ where acct_id=#{owner.owerId}
+ </select>
+ </mapper>

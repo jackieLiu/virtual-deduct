@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.runner.center.omc.virtualdeduct.mapper.abm.FundBookMapper" >
+	<resultMap type="com.ai.runner.center.omc.virtualdeduct.entity.abm.FundInfo" id="queryMap">
+		<id column="account_id" property="accountId"/>
+		<collection property="fundBooks" ofType="com.ai.runner.center.omc.virtualdeduct.entity.abm.FundBookInfo">
+			<id column="book_id" property="bookId"/>
+			<result column="balance" property="balance"/>
+			<result column="effect_date" property="effectDate"/>
+			<result column="expire_date" property="expireDate"/>
+			<result column="subject_id" property="subjectId"/>
+			<result column="subs_freeze_id" property="subsId"/>
+		</collection>
+	</resultMap>
+ <select id="query" parameterType="com.ai.runner.center.omc.api.virtualdeduct.param.OmcObj" resultMap="queryMap">
+ select account_id,book_id,balance,effect_date,expire_date,subject_id,subs_freeze_id
+ from fun_fund_book
+ where account_id=#{owerid}
+ </select>
+ </mapper>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.runner.center.omc.virtualdeduct.mapper.ar.AccCycleControlMapper" >
+	<resultMap type="com.ai.runner.center.omc.virtualdeduct.entity.ar.AccCycleInfo" id="queryMap">
+		<result column="cycle_month" property="cycle_month"/>
+		<result column="settle_date" property="settle_date"/>
+	</resultMap>
+ <select id="query" parameterType="String" resultMap="queryMap">
+ select  cycle_month,settle_date
+ from acc_cycle_control
+ where status=0
+ </select>
+ </mapper>
